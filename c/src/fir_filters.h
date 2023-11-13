@@ -1,3 +1,5 @@
+#include "filter_utils.h"
+
 #ifndef FIR_FILTERS_H
 #define FIR_FILTERS_H
 

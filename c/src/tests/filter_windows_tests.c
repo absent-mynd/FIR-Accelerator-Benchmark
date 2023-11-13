@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include "filter_windows.h"
 
 #define PI 3.14159265358979323846
 #define EPSILON 1e-6

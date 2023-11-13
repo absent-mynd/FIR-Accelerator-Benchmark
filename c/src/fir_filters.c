@@ -1,5 +1,4 @@
 #include "fir_filters.h"
-#include "filter_utils.h"
 
 // M = filter length - 1
 // h = filter coefficients

@@ -1,4 +1,5 @@
 #include "fixed.h"
+#include "filter_utils.h"
 #ifndef FIR_FILTERS_FIXED_H
 #define FIR_FILTERS_FIXED_H
 

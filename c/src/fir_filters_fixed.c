@@ -22,9 +22,9 @@ fixed fir2_fixed(int M, fixed *h, fixed *w, fixed x) {
 
     w[0] = x;
 
-    y = dot(M, h, w);
+    y = dot_fixed(M, h, w);
 
-    delay(M, w);
+    delay_fixed(M, w);
 
     return y;
 }
@@ -53,11 +53,11 @@ fixed cfir_fixed(int M, fixed *h, fixed *w, fixed **p, fixed x) {
 
     for (y = 0, i = 0; i <= M; i++) {
         y = FIXED_ADD(y, FIXED_MUL((*h++), *(*p)++));
-        wrap(M, w, p);
+        wrap_fixed(M, w, p);
     }
 
     (*p)--; 
-    wrap(M, w, p);
+    wrap_fixed(M, w, p);
 
     return y;
 }
@@ -68,11 +68,11 @@ fixed cfir1_fixed(int M, fixed *h, fixed *w, fixed **p, fixed x) {
     fixed y;
 
     *(*p)-- = x;
-    wrap(M, w, p); 
+    wrap_fixed(M, w, p); 
 
     for (y = 0, h += M, i = M; i >= 0; i--) {
         y = FIXED_ADD(y, FIXED_MUL((*h--), *(*p)--));
-        wrap(M, w, p);
+        wrap_fixed(M, w, p);
     }
 
     return y;

@@ -1,10 +1,12 @@
 #include <stdint.h>
 
 // Define the fixed-point data type (e.g., 32-bit integer)
-typedef int32_t fixed;
+// Note that the Xylinx FIR compiler has a 48-bit accumulator
+typedef int64_t fixed;
 
 // Define the number of fractional bits
-#define FRACTIONAL_BITS 16  // Example: 16 fractional bits
+// On the Xylinx 
+#define FRACTIONAL_BITS 16  
 
 // Macro to convert from float to fixed-point
 #define FLOAT_TO_FIXED(x) ((fixed)((x) * (1 << FRACTIONAL_BITS)))

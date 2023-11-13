@@ -1,3 +1,7 @@
+#include "filter_utils.h"
+#include <math.h>
+#include <stdio.h>
+
 #ifndef IDEAL_FILTERS_H
 #define IDEAL_FILTERS_H
 

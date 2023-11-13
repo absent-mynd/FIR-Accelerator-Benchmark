@@ -14,6 +14,10 @@
     } while (0)
 
 
+void reset_filter_state(int M, double *w) {
+    for (int i = 0; i <= M; i++) w[i] = 0;
+}
+
 // Helper function to test FIR filter
 void test_fir_filter(double (*fir_func)(int, double *, double *, double), 
                      int M, double *h, double *w, double *x, int x_len, 
@@ -48,7 +52,7 @@ void test_cfir_filter(double (*cfir_func)(int, double *, double *, double **, do
 }
 
 void test_cfir2_filter(double (*cfir2_func)(int, double *, double *, int *, double), 
-                     int M, double *h, double *w, double *q, double *x, int x_len, 
+                     int M, double *h, double *w, int *q, double *x, int x_len, 
                      double *expected_output) {
     double y;
 
@@ -64,9 +68,6 @@ void test_cfir2_filter(double (*cfir2_func)(int, double *, double *, int *, doub
 }
 
 
-void reset_filter_state(int M, double *w) {
-    for (int i = 0; i <= M; i++) w[i] = 0;
-}
 
 
 int main() {
