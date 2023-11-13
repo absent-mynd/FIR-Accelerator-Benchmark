@@ -112,24 +112,16 @@ int main() {
     // Testing fir2 (assuming dot and delay functions are defined)
     test_fir_filter(fir2, M, h, w, x, x_len, expected_output);
 
-    reset_filter_state(M, w);
-
     // Testing fir3
     test_fir_filter(fir3, M, h, w, x, x_len, expected_output);
-
-    reset_filter_state(M, w);
 
     // Testing cfir
     double *p = w;  // Setup for cfir circular buffer
     test_cfir_filter(cfir, M, h, w, &p, x, x_len, expected_output);
 
-    reset_filter_state(M, w);
-
     // Testing cfir1
     p = w;  // Reset pointer for cfir1
     test_cfir_filter(cfir1, M, h, w, &p, x, x_len, expected_output);
-    
-    reset_filter_state(M, w);
 
     // Testing cfir2
     int q = 0;  // Setup for cfir2 circular buffer

@@ -29,7 +29,7 @@ void test_ideal_bandpass_filter() {
     double h[5];
     ideal_bandpass_filter(h, 5, 0.2, 0.5);
 
-    // Expected values need to be calculated or obtained from a reliable source
+    // Expected values are generated from ideal_filters_ref_data.py
     double expected[5] = { -0.03198677781065059, 0.18716363098329009, 0.7924562667427429, 0.18716363098329009, -0.03198677781065059 };
     
     ASSERT(arrays_almost_equal(h, expected, 5), "Bandpass filter test failed.");
@@ -78,15 +78,14 @@ void test_ideal_bandpass_filter_edge_cases() {
 
     // Test with N = 0
     ideal_bandpass_filter(h, 0, 0.2, 0.5);
-    // Add assertion if necessary
 
     // Test with negative frequencies
     ideal_bandpass_filter(h, 5, -0.1, -0.2);
-    // is performance here defined?
 
     // Test with f1 > f2
     ideal_bandpass_filter(h, 5, 0.5, 0.2);
-    // Add assertion if necessary
+
+    // not a big deal, behaviour here is undefined.  just shouldn't crash
 }
 
 
@@ -120,10 +119,10 @@ void test_ideal_low_high_pass_filter_edge_cases() {
 
     // Test with invalid cutoff frequency (outside 0 to 0.5 range)
     ideal_low_high_pass_filter(h, 5, -0.1, 0); // Lowpass
-    // Add assertion if necessary
 
     ideal_low_high_pass_filter(h, 5, 1.1, 1); // Highpass
-    // Add assertion if necessary
+    
+    // not a big deal, behaviour here is undefined.  just shouldn't crash
 }
 
 

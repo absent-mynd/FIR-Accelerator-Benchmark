@@ -10,7 +10,7 @@ def print_expected_values(window_func, N, additional_param=None):
     print(f"Expected values for N={N}: {window}")
 
 
-N = 5  # Example length of the window
+N = 5
 
 
 # Hamming Window
@@ -25,6 +25,6 @@ print_expected_values(np.hanning, N)
 print("\nBlackman Window:")
 print_expected_values(np.blackman, N)
 
-# Kaiser Window (with beta = 5.0 as an example)
+# Kaiser Window (with beta = 5.0)
 print("\nKaiser Window:")
 print_expected_values(np.kaiser, N, 5.0)

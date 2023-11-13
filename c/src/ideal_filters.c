@@ -73,8 +73,3 @@ void ideal_low_high_pass_filter(double* h, int N, double fc, int isHighpass) {
         }
     }
 }
-
-// Main function for testing
-int main() {
-    return 0;
-}

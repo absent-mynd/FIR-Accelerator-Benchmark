@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-// Definitions of window functions and apply_* functions go here
-
 #define PI 3.14159265358979323846
 #define EPSILON 1e-6
 
@@ -30,7 +28,6 @@ void test_hamming_window() {
     double h[N] = {1, 1, 1, 1, 1};
     apply_hamming_window(h, N);
 
-    // Expected values need to be pre-calculated or obtained from a reliable source
     double expected[N] = {/* expected values here */};
     
     ASSERT(arrays_almost_equal(h, expected, N), "Hamming window test failed.");
