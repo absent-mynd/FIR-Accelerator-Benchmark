@@ -22,3 +22,6 @@ typedef int64_t fixed;
 
 // Macro for fixed-point subtraction
 #define FIXED_SUB(a, b) ((fixed)(a) - (b))
+
+// ignore small differences 
+#define FIXED_POINT_EPSILON 1 // or this?  might need to tweak. (1 << (FIXED_POINT_FRACTIONAL_BITS - 10))
