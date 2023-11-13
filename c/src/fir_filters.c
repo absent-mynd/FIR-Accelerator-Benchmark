@@ -1,6 +1,12 @@
 #include "fir_filters.h"
 #include "filter_utils.h"
 
+// M = filter length - 1
+// h = filter coefficients
+// w = filter states
+// x = current input sample
+// y = current output sample
+
 // FIR filter in direct form
 double fir(int M, double *h, double *w, double x) {
     int i;
