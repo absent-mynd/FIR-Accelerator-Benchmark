@@ -29,6 +29,32 @@ void test_fir_filter(fixed (*fir_func)(int, fixed *, fixed *, fixed),
     }
 }
 
+void test_cfir_filter(fixed (*cfir_func)(int, fixed *, fixed *, fixed **, fixed),
+                      int M, fixed *h, fixed *w, fixed **p, fixed *x, int x_len,
+                      fixed *expected_output) {
+    fixed y;
+
+    reset_filter_state(M, w);
+
+    for (int i = 0; i < x_len; ++i) {
+        y = cfir_func(M, h, w, p, x[i]);
+        ASSERT(abs(y - expected_output[i]) <= FIXED_POINT_EPSILON, "Output does not match expected.");
+    }
+}
+
+void test_cfir2_filter(fixed (*cfir2_func)(int, fixed *, fixed *, int *, fixed),
+                      int M, fixed *h, fixed *w, int *q, fixed *x, int x_len,
+                      fixed *expected_output) {
+    fixed y;
+
+    reset_filter_state(M, w);
+
+    for (int i = 0; i < x_len; ++i) {
+        y = cfir2_func(M, h, w, q, x[i]);
+        ASSERT(abs(y - expected_output[i]) <= FIXED_POINT_EPSILON, "Output does not match expected.");
+    }
+}
+
 // Similar updates for test_cfir_filter and test_cfir2_filter...
 
 int main() {
