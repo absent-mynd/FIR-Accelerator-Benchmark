@@ -1,7 +1,10 @@
-#include "fir_filters.h"
-#include "fixed.h"
+#include "fir_filters_fixed.h"
+#include "fixedptc.h"
 #include <stdio.h>
 #include <stdlib.h>
+
+
+#define EPSILON 1e-6
 
 #define ASSERT(condition, message) \
     do { \
@@ -11,66 +14,113 @@
         } \
     } while (0)
 
-void reset_filter_state(int M, fixed *w) {
+void reset_filter_state(int M, fixedpt *w) {
     for (int i = 0; i <= M; i++) w[i] = 0;
 }
 
-// Update test functions to use fixed-point arithmetic
-void test_fir_filter(fixed (*fir_func)(int, fixed *, fixed *, fixed),
-                     int M, fixed *h, fixed *w, fixed *x, int x_len,
-                     fixed *expected_output) {
-    fixed y;
+// Update test functions to use fixedpt-point arithmetic
+void test_fir_filter(fixedpt (*fir_func)(int, fixedpt *, fixedpt *, fixedpt),
+                     int M, fixedpt *h, fixedpt *w, fixedpt *x, int x_len,
+                     fixedpt *expected_output) {
+    fixedpt y;
 
     reset_filter_state(M, w);
 
     for (int i = 0; i < x_len; ++i) {
         y = fir_func(M, h, w, x[i]);
-        ASSERT(abs(y - expected_output[i]) <= FIXED_POINT_EPSILON, "Output does not match expected.");
+        printf("y = %f = %lld\n", fixedpt_tofloat(y), y);
+        printf("expected_output = %f = %lld\n", fixedpt_tofloat(expected_output[i]), expected_output[i]);
+        ASSERT(fixedpt_tofloat(fixedpt_abs(y - expected_output[i])) <= EPSILON, "Output does not match expected for fir.");
     }
 }
 
-void test_cfir_filter(fixed (*cfir_func)(int, fixed *, fixed *, fixed **, fixed),
-                      int M, fixed *h, fixed *w, fixed **p, fixed *x, int x_len,
-                      fixed *expected_output) {
-    fixed y;
+void test_cfir_filter(fixedpt (*cfir_func)(int, fixedpt *, fixedpt *, fixedpt **, fixedpt),
+                      int M, fixedpt *h, fixedpt *w, fixedpt **p, fixedpt *x, int x_len,
+                      fixedpt *expected_output) {
+    fixedpt y;
 
     reset_filter_state(M, w);
 
     for (int i = 0; i < x_len; ++i) {
         y = cfir_func(M, h, w, p, x[i]);
-        ASSERT(abs(y - expected_output[i]) <= FIXED_POINT_EPSILON, "Output does not match expected.");
+
+        ASSERT(fixedpt_tofloat(fixedpt_abs(y - expected_output[i])) <= EPSILON, "Output does not match expected for cfir.");
     }
 }
 
-void test_cfir2_filter(fixed (*cfir2_func)(int, fixed *, fixed *, int *, fixed),
-                      int M, fixed *h, fixed *w, int *q, fixed *x, int x_len,
-                      fixed *expected_output) {
-    fixed y;
+void test_cfir2_filter(fixedpt (*cfir2_func)(int, fixedpt *, fixedpt *, int *, fixedpt),
+                      int M, fixedpt *h, fixedpt *w, int *q, fixedpt *x, int x_len,
+                      fixedpt *expected_output) {
+    fixedpt y;
 
     reset_filter_state(M, w);
 
     for (int i = 0; i < x_len; ++i) {
         y = cfir2_func(M, h, w, q, x[i]);
-        ASSERT(abs(y - expected_output[i]) <= FIXED_POINT_EPSILON, "Output does not match expected.");
+        ASSERT(fixedpt_tofloat(fixedpt_abs(y - expected_output[i])) <= EPSILON, "Output does not match expected for cfir2.");
     }
 }
-
-// Similar updates for test_cfir_filter and test_cfir2_filter...
 
 int main() {
     // Test parameters
     int M = 3;  // Filter order
-    fixed h[] = {float_to_fixed(0.1), float_to_fixed(0.2), float_to_fixed(0.3), float_to_fixed(0.4)};
-    fixed w[4] = {0};  // Filter state
+    fixedpt h[] = {fixedpt_fromfloat(0.1), fixedpt_fromfloat(0.2), fixedpt_fromfloat(0.3), fixedpt_fromfloat(0.4)};
+    fixedpt w[4] = {0};  // Filter state
 
     int x_len = 10;  // Length of input signal
-    fixed x[] = { /* Fixed-point representations of input values */ };
-    fixed expected_output[] = { /* Fixed-point representations of expected output values */ };
+    fixedpt x[] = {
+        fixedpt_fromfloat(0.0), 
+        fixedpt_fromfloat(0.95105651), 
+        fixedpt_fromfloat(0.58778525), 
+        fixedpt_fromfloat(-0.5877852), 
+        fixedpt_fromfloat(-0.9510565), 
+        fixedpt_fromfloat(0),
+        fixedpt_fromfloat(0.95105651), 
+        fixedpt_fromfloat(0.58778525), 
+        fixedpt_fromfloat(-0.5877852), 
+        fixedpt_fromfloat(-0.9510565)
+    } ;  // Input signal, obtained from Python script (see fir_filters_tests.py)
+    fixedpt expected_output[] = {
+        fixedpt_fromfloat(0.0), 
+        fixedpt_fromfloat(0.09510565), 
+        fixedpt_fromfloat(0.24898982), 
+        fixedpt_fromfloat(0.34409548), 
+        fixedpt_fromfloat(0.34409548), 
+        fixedpt_fromfloat(-0.1314327), 
+        fixedpt_fromfloat(-0.4253254), 
+        fixedpt_fromfloat(-0.1314327), 
+        fixedpt_fromfloat(0.34409548), 
+        fixedpt_fromfloat(0.34409548), 
+        fixedpt_fromfloat(-0.1314327), 
+        fixedpt_fromfloat(-0.5204310), 
+        fixedpt_fromfloat(-0.3804226)
+    };
 
     // Testing fir
-    test_fir_filter(fir, M, h, w, x, x_len, expected_output);
+    printf("Testing fir_fixed\n");
+    test_fir_filter(fir_fixed, M, h, w, x, x_len, expected_output);
 
-    // ... TODO Testing other filters
+    printf("Testing fir2_fixed\n");
+    test_fir_filter(fir2_fixed, M, h, w, x, x_len, expected_output);
+
+    printf("Testing fir3_fixed\n");
+    test_fir_filter(fir3_fixed, M, h, w, x, x_len, expected_output);
+
+    // Testing cfir
+    fixedpt *p = w;  // Setup for cfir circular buffer
+    printf("Testing cfir_fixed\n");
+    test_cfir_filter(cfir_fixed, M, h, w, &p, x, x_len, expected_output);
+
+    // Testing cfir1
+    printf("Testing cfir1_fixed\n");
+    test_cfir_filter(cfir1_fixed, M, h, w, &p, x, x_len, expected_output);
+
+    // Testing cfir2
+    int q = 0;  // Setup for cfir2 circular buffer
+    printf("Testing cfir2_fixed\n");
+    test_cfir2_filter(cfir2_fixed, M, h, w, &q, x, x_len, expected_output);
+
+
 
     printf("All tests passed successfully.\n");
     return EXIT_SUCCESS;

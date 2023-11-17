@@ -11,7 +11,7 @@ void wrap(int M, double *w, double **p) {
 }
 
 
-void wrap_fixed(int M, fixed *w, fixed **p) {
+void wrap_fixed(int M, fixedpt *w, fixedpt **p) {
     if (*p > w + M)
         *p -= M + 1;  // when *p = w + M + 1, it wraps around to *p = w
 
@@ -28,7 +28,7 @@ void wrap2(int M, int *q) {
         *q += M + 1;  // when *q = -1, it wraps around to *q = M
 }
 
-void delay_fixed(int D, fixed *w) {
+void delay_fixed(int D, fixedpt *w) {
     int i;
 
     for (i = D; i >= 1; i--)  // reverse-order updating
@@ -54,12 +54,12 @@ double dot(int M, double *h, double *w) {
     return y;
 }
 
-fixed dot_fixed(int M, fixed *h, fixed *w) {
+fixedpt dot_fixed(int M, fixedpt *h, fixedpt *w) {
     int i;
-    fixed y;
+    fixedpt y;
 
     for (y = 0, i = 0; i <= M; i++)  // compute dot product
-        y = FIXED_ADD(y, FIXED_MUL(h[i], w[i]));      
+        y += fixedpt_mul(h[i], w[i]);      
 
     return y;
 }
