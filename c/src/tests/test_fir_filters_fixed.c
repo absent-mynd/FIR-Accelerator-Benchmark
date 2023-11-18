@@ -28,9 +28,9 @@ void test_fir_filter(fixedpt (*fir_func)(int, fixedpt *, fixedpt *, fixedpt),
 
     for (int i = 0; i < x_len; ++i) {
         y = fir_func(M, h, w, x[i]);
-        printf("y = %f = %lld\n", fixedpt_tofloat(y), y);
-        printf("expected_output = %f = %lld\n", fixedpt_tofloat(expected_output[i]), expected_output[i]);
-        ASSERT(fixedpt_tofloat(fixedpt_abs(y - expected_output[i])) <= EPSILON, "Output does not match expected for fir.");
+        printf("y = %f = %lld\n", fixedpt_todouble(y), y);
+        printf("expected_output = %f = %lld\n", fixedpt_todouble(expected_output[i]), expected_output[i]);
+        ASSERT(fixedpt_todouble(fixedpt_abs(y - expected_output[i])) <= EPSILON, "Output does not match expected for fir.");
     }
 }
 
@@ -44,7 +44,7 @@ void test_cfir_filter(fixedpt (*cfir_func)(int, fixedpt *, fixedpt *, fixedpt **
     for (int i = 0; i < x_len; ++i) {
         y = cfir_func(M, h, w, p, x[i]);
 
-        ASSERT(fixedpt_tofloat(fixedpt_abs(y - expected_output[i])) <= EPSILON, "Output does not match expected for cfir.");
+        ASSERT(fixedpt_todouble(fixedpt_abs(y - expected_output[i])) <= EPSILON, "Output does not match expected for cfir.");
     }
 }
 
@@ -57,43 +57,43 @@ void test_cfir2_filter(fixedpt (*cfir2_func)(int, fixedpt *, fixedpt *, int *, f
 
     for (int i = 0; i < x_len; ++i) {
         y = cfir2_func(M, h, w, q, x[i]);
-        ASSERT(fixedpt_tofloat(fixedpt_abs(y - expected_output[i])) <= EPSILON, "Output does not match expected for cfir2.");
+        ASSERT(fixedpt_todouble(fixedpt_abs(y - expected_output[i])) <= EPSILON, "Output does not match expected for cfir2.");
     }
 }
 
 int main() {
     // Test parameters
     int M = 3;  // Filter order
-    fixedpt h[] = {fixedpt_fromfloat(0.1), fixedpt_fromfloat(0.2), fixedpt_fromfloat(0.3), fixedpt_fromfloat(0.4)};
+    fixedpt h[] = {fixedpt_fromdouble(0.1), fixedpt_fromdouble(0.2), fixedpt_fromdouble(0.3), fixedpt_fromdouble(0.4)};
     fixedpt w[4] = {0};  // Filter state
 
     int x_len = 10;  // Length of input signal
     fixedpt x[] = {
-        fixedpt_fromfloat(0.0), 
-        fixedpt_fromfloat(0.95105651), 
-        fixedpt_fromfloat(0.58778525), 
-        fixedpt_fromfloat(-0.5877852), 
-        fixedpt_fromfloat(-0.9510565), 
-        fixedpt_fromfloat(0),
-        fixedpt_fromfloat(0.95105651), 
-        fixedpt_fromfloat(0.58778525), 
-        fixedpt_fromfloat(-0.5877852), 
-        fixedpt_fromfloat(-0.9510565)
+        fixedpt_fromdouble(0.0), 
+        fixedpt_fromdouble(0.95105651), 
+        fixedpt_fromdouble(0.58778525), 
+        fixedpt_fromdouble(-0.5877852), 
+        fixedpt_fromdouble(-0.9510565), 
+        fixedpt_fromdouble(0),
+        fixedpt_fromdouble(0.95105651), 
+        fixedpt_fromdouble(0.58778525), 
+        fixedpt_fromdouble(-0.5877852), 
+        fixedpt_fromdouble(-0.9510565)
     } ;  // Input signal, obtained from Python script (see fir_filters_tests.py)
     fixedpt expected_output[] = {
-        fixedpt_fromfloat(0.0), 
-        fixedpt_fromfloat(0.09510565), 
-        fixedpt_fromfloat(0.24898982), 
-        fixedpt_fromfloat(0.34409548), 
-        fixedpt_fromfloat(0.34409548), 
-        fixedpt_fromfloat(-0.1314327), 
-        fixedpt_fromfloat(-0.4253254), 
-        fixedpt_fromfloat(-0.1314327), 
-        fixedpt_fromfloat(0.34409548), 
-        fixedpt_fromfloat(0.34409548), 
-        fixedpt_fromfloat(-0.1314327), 
-        fixedpt_fromfloat(-0.5204310), 
-        fixedpt_fromfloat(-0.3804226)
+        fixedpt_fromdouble(0.0), 
+        fixedpt_fromdouble(0.09510565), 
+        fixedpt_fromdouble(0.24898982), 
+        fixedpt_fromdouble(0.34409548), 
+        fixedpt_fromdouble(0.34409548), 
+        fixedpt_fromdouble(-0.1314327), 
+        fixedpt_fromdouble(-0.4253254), 
+        fixedpt_fromdouble(-0.1314327), 
+        fixedpt_fromdouble(0.34409548), 
+        fixedpt_fromdouble(0.34409548), 
+        fixedpt_fromdouble(-0.1314327), 
+        fixedpt_fromdouble(-0.5204310), 
+        fixedpt_fromdouble(-0.3804226)
     };
 
     // Testing fir

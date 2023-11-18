@@ -136,6 +136,18 @@ fixedpt_fromfloat(float F)
     return (fixedpt)(F * ((fixedpt)1 << FIXEDPT_FBITS));
 }
 
+static inline double
+fixedpt_todouble(fixedpt A)
+{
+	return (double)A / (double)((fixedpt)1 << FIXEDPT_FBITS);
+}
+
+static inline fixedpt
+fixedpt_fromdouble(double F)
+{
+	return (fixedpt)(F * ((fixedpt)1 << FIXEDPT_FBITS));
+}
+
 /* Multiplies two fixedpt numbers, returns the result. */
 static inline fixedpt
 fixedpt_mul(fixedpt A, fixedpt B)
