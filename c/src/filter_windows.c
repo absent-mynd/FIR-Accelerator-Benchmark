@@ -2,16 +2,20 @@
 #include <stdio.h>
 
 #define PI 3.14159265358979323846
+#include <math.h>
 
 double bessel_i0(double x) {
-    double sum = 1.0, y = x / 2.0, temp = y;
-    int i = 1;
-    while (temp > 1e-10) {
-        temp *= (y / i);
-        sum += temp * temp;
-        i++;
+    double eps = 1e-9;
+    int n = 1;
+    double S = 1, D = 1, T;
+
+    while (D > eps * S) {
+        T = x / (2 * n++);
+        D *= T * T;
+        S += D;
     }
-    return sum;
+
+    return S;
 }
 
 // Window Functions
